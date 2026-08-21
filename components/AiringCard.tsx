@@ -4,9 +4,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Airing } from "@/lib/xmltv";
 import { formatDay, formatTime } from "@/lib/format";
+import { useTimezone } from "@/contexts/TimezoneContext";
 import BigCountdown from "./BigCountdown";
 
 export default function AiringCard({ airing }: { airing: Airing }) {
+  const tz = useTimezone();
   return (
     <motion.article
       className="glass rounded-3xl overflow-hidden"
@@ -101,7 +103,7 @@ export default function AiringCard({ airing }: { airing: Airing }) {
                 textTransform: "uppercase",
               }}
             >
-              {formatDay(airing.start)}
+              {formatDay(airing.start, tz)}
             </span>
             <span
               style={{
@@ -112,7 +114,7 @@ export default function AiringCard({ airing }: { airing: Airing }) {
                 lineHeight: 1.05,
               }}
             >
-              {formatTime(airing.start)} – {formatTime(airing.stop)}
+              {formatTime(airing.start, tz)} – {formatTime(airing.stop, tz)}
             </span>
           </div>
         </div>

@@ -5,20 +5,21 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Airing } from "@/lib/xmltv";
 import { formatDay, formatTime, dateKey } from "@/lib/format";
+import { useTimezone } from "@/contexts/TimezoneContext";
 
 const PAGE_SIZE = 14;
 
-function groupByDay(airings: Airing[]): Map<string, Airing[]> {
+function groupByDay(airings: Airing[], tz: string): Map<string, Airing[]> {
   const map = new Map<string, Airing[]>();
   for (const a of airings) {
-    const key = dateKey(a.start);
+    const key = dateKey(a.start, tz);
     if (!map.has(key)) map.set(key, []);
     map.get(key)!.push(a);
   }
   return map;
 }
 
-function AiringRow({ airing, index }: { airing: Airing; index: number }) {
+function AiringRow({ airing, index, tz }: { airing: Airing; index: number; tz: string }) {
   return (
     <motion.li
       initial={{ opacity: 0, x: -16 }}
@@ -50,7 +51,7 @@ function AiringRow({ airing, index }: { airing: Airing; index: number }) {
           flexShrink: 0,
         }}
       >
-        {formatTime(airing.start)}
+        {formatTime(airing.start, tz)}
       </span>
 
       <span className="truncate" style={{ fontSize: "clamp(15px, 2.5vw, 18px)" }}>
@@ -74,9 +75,10 @@ function AiringRow({ airing, index }: { airing: Airing; index: number }) {
 }
 
 export default function ScheduleList({ airings }: { airings: Airing[] }) {
+  const tz = useTimezone();
   const [visible, setVisible] = useState(PAGE_SIZE);
   const shown = airings.slice(0, visible);
-  const groups = groupByDay(shown);
+  const groups = groupByDay(shown, tz);
   const hasMore = visible < airings.length;
 
   return (
@@ -87,11 +89,11 @@ export default function ScheduleList({ airings }: { airings: Airing[] }) {
             className="tracking-widest uppercase mb-3"
             style={{ color: "var(--color-muted)", fontFamily: "var(--font-display)", fontSize: "clamp(16px, 3vw, 22px)" }}
           >
-            {formatDay(items[0].start)}
+            {formatDay(items[0].start, tz)}
           </h3>
           <ul className="flex flex-col gap-2">
             {items.map((a, i) => (
-              <AiringRow key={`${a.channelId}-${a.start}`} airing={a} index={i} />
+              <AiringRow key={`${a.channelId}-${a.start}`} airing={a} index={i} tz={tz} />
             ))}
           </ul>
         </section>

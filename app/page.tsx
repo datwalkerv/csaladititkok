@@ -2,6 +2,7 @@ import { fetchAirings } from "@/lib/xmltv";
 import AiringCard from "@/components/AiringCard";
 import ScheduleList from "@/components/ScheduleList";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import TimezoneFlag from "@/components/TimezoneFlag";
 
 export const revalidate = 3600;
 
@@ -16,6 +17,7 @@ export default async function Home() {
   return (
     <>
       <AnimatedBackground />
+      <TimezoneFlag />
 
       <main className="relative min-h-screen px-4 pb-24" style={{ paddingTop: "clamp(48px, 8vw, 80px)" }}>
         <div className="mx-auto w-full" style={{ maxWidth: "880px" }}>
