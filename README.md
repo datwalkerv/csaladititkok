@@ -31,24 +31,5 @@ Valós idejű visszaszámláló és teljes adásrend a Családi Titkok sorozatho
 - **Fonts**: [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue) (Display & Numerals)
 - **Data Source**: [XMLTV Feed](https://github.com/dobrosi/xmltv) — public Hungarian TV schedule
 
-
-## ⚙️ Environment Variables
-
-| Variable | Description | Default |
-|---|---|---|
-| `NEXT_PUBLIC_BASE_URL` | Production URL used for canonical links, OG metadata, and sitemap | `https://csaladititkok.vercel.app` |
-
-
-## 🚀 Getting Started
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-<br>
-
-**Made with love for Hungarian TV fans. 📺**  
+**Made with love for love. 📺**  
 *Never miss a Családi Titkok episode again.*
