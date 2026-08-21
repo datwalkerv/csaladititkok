@@ -67,7 +67,7 @@ export const metadata: Metadata = {
       "Valós idejű visszaszámláló és teljes adásrend a Családi Titkok sorozathoz a Super TV2 műsorán.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Családi Titkok – Adásrend",
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     title: "Családi Titkok – Mikor megy a Super TV2-n?",
     description:
       "Valós idejű visszaszámláló és teljes adásrend a Családi Titkok sorozathoz.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
 
   robots: {
