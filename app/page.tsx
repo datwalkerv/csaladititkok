@@ -3,8 +3,64 @@ import AiringCard from "@/components/AiringCard";
 import ScheduleList from "@/components/ScheduleList";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import TimezoneFlag from "@/components/TimezoneFlag";
+import type { Airing } from "@/lib/xmltv";
 
 export const revalidate = 3600;
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://csaladititkok.vercel.app";
+
+function buildJsonLd(airings: Airing[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TVSeries",
+        "@id": `${BASE_URL}/#tvseries`,
+        name: "Családi Titkok",
+        alternateName: ["Családi titkok", "Family Secrets Hungary"],
+        description:
+          "Hétköznapi csaták, melyek harcmezején családtagok kerülnek egymással szembe. A legjobb forgatókönyveket az Élet írja – Családi Titkok a Super TV2 műsorán.",
+        inLanguage: "hu",
+        countryOfOrigin: { "@type": "Country", name: "Magyarország" },
+        genre: ["Reality", "Dráma", "Dokumentumfilm"],
+        url: BASE_URL,
+        image: `${BASE_URL}/logo.png`,
+        broadcastChannel: {
+          "@type": "TelevisionChannel",
+          name: "Super TV2",
+          broadcastDisplayName: "Super TV2 HD",
+        },
+      },
+      ...airings.slice(0, 10).map((a) => ({
+        "@type": "BroadcastEvent",
+        name: `Családi Titkok${a.subTitle ? ` – ${a.subTitle}` : ""}${a.episodeNum ? ` (${a.episodeNum})` : ""}`,
+        startDate: a.start,
+        endDate: a.stop,
+        inLanguage: "hu",
+        videoFormat: "HD",
+        isLiveBroadcast: false,
+        publishedOn: {
+          "@type": "TelevisionChannel",
+          name: "Super TV2",
+        },
+        workPresented: { "@id": `${BASE_URL}/#tvseries` },
+      })),
+      {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+        url: BASE_URL,
+        name: "Családi Titkok Adásrend",
+        description: "Mikor megy a Családi Titkok a Super TV2-n? Valós idejű adásrend és visszaszámláló.",
+        inLanguage: "hu",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${BASE_URL}/?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+}
 
 export default async function Home() {
   let airings = await fetchAirings().catch(() => null);
@@ -16,6 +72,11 @@ export default async function Home() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(airings)) }}
+      />
+
       <AnimatedBackground />
       <TimezoneFlag />
 
