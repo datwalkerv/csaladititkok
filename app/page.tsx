@@ -5,7 +5,7 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 import TimezoneFlag from "@/components/TimezoneFlag";
 import type { Airing } from "@/lib/xmltv";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://csaladititkok.vercel.app";
 

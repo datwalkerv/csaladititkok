@@ -1,5 +1,4 @@
 import { XMLParser } from "fast-xml-parser";
-import { unstable_cache } from "next/cache";
 
 const FEED_URL =
   "https://raw.githubusercontent.com/dobrosi/xmltv/refs/heads/main/channels.xml";
@@ -53,13 +52,13 @@ function getText(v: unknown): string {
     return hu?.["#text"] ?? (v[0] as { "#text": string })?.["#text"] ?? "";
   }
   if (typeof v === "object" && "#text" in (v as object)) {
-    return (v as { "#text": string })["#text"];
+    return String((v as { "#text": unknown })["#text"]);
   }
   return String(v);
 }
 
 async function _fetchAirings(): Promise<Airing[]> {
-  const res = await fetch(FEED_URL, { cache: "no-store" });
+  const res = await fetch(FEED_URL);
   if (!res.ok) throw new Error(`Feed fetch failed: ${res.status}`);
   const xml = await res.text();
 
@@ -131,7 +130,4 @@ async function _fetchAirings(): Promise<Airing[]> {
   return airings;
 }
 
-export const fetchAirings = unstable_cache(_fetchAirings, ["xmltv-airings"], {
-  revalidate: 3600,
-  tags: ["xmltv"],
-});
+export const fetchAirings = _fetchAirings;

@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchAirings } from "@/lib/xmltv";
 
-export const revalidate = 3600;
-
 export async function GET() {
   try {
     const airings = await fetchAirings();
